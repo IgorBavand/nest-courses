@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Course } from './entities/courses.entity';
 import { Repository } from 'typeorm';
@@ -12,10 +12,10 @@ export class CoursesService {
   private readonly NOT_FOUND_MENSAGE : string = 'curso nao encontrado!';
 
   constructor (
-    @InjectRepository(Course)
+    @Inject('COURSES_REPOSITORY')
     private readonly coursesRepository : Repository<Course>,
 
-    @InjectRepository(Tag)
+    @Inject('TAGS_REPOSITORY')
     private readonly tagRepository : Repository<Tag>
   ) {}
 
