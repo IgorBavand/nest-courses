@@ -9,19 +9,26 @@ import { Tag } from './entities/tag.entity';
 @Injectable()
 export class CoursesService {
 
-  private readonly NOT_FOUND_MENSAGE : string = 'curso nao encontrado!';
+  private readonly NOT_FOUND_MENSAGE : string = 'Course not found!';
 
-  constructor (
-    @Inject('COURSES_REPOSITORY')
-    private readonly coursesRepository : Repository<Course>,
+  @Inject('COURSES_REPOSITORY')
+  private readonly coursesRepository : Repository<Course>;
 
-    @Inject('TAGS_REPOSITORY')
-    private readonly tagRepository : Repository<Tag>
-  ) {}
+  @Inject('TAGS_REPOSITORY')
+  private readonly tagRepository : Repository<Tag>;
 
   findAll() {
     //adicionar o relations faz com que traga no find as tags relacionadas aos cursos
     return this.coursesRepository.find({ relations: ['tags'] });
+  }
+
+
+  findOne(id: number) {
+    //adicionar o relations faz com que traga no find as tags relacionadas aos cursos
+    return this.coursesRepository.findOne({
+      where: {id},
+     relations: ['tags']
+    });
   }
 
   async create(course : CreateCourseDto) {
@@ -62,7 +69,7 @@ export class CoursesService {
 
   async delete(id: string) {
 
-    const course = await this.coursesRepository.findBy({ id: +id });
+    const course = await this.coursesRepository.findOne({ where: { id : +id} });
 
     if(!course){
       throw new NotFoundException(this.NOT_FOUND_MENSAGE);

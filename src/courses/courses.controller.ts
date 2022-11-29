@@ -16,6 +16,11 @@ export class CoursesController {
     return this.courseService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param() params): any {
+    return this.courseService.findOne(params.id);
+  }
+
   @Post()
   createCourse(@Body() createCourseDto: CreateCourseDto): any {
     return this.courseService.create(createCourseDto);
